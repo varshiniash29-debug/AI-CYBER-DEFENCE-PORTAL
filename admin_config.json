@@ -1,0 +1,19 @@
+{
+  "administrators": [
+    {
+      "admin_id": "DCERT-ADMIN-94281",
+      "email": "v.krishnasrivarshini@gmail.com",
+      "password": "ADMIN1@1930"
+    },
+    {
+      "admin_id": "DCERT-ADMIN-52930",
+      "email": "minnuharsha0505@gmail.com",
+      "password": "ADMIN2@1930"
+    },
+    {
+      "admin_id": "DCERT-ADMIN-38472",
+      "email": "vani@gmail.com",
+      "password": "ADMIN3@1930"
+    }
+  ]
+}

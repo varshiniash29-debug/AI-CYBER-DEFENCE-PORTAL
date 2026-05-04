@@ -1,0 +1,109 @@
+[
+  {
+    "name": "Arjun Mehta",
+    "rank": "Captain",
+    "branch": "Army",
+    "service_id": "IC-458921A",
+    "email": "v.krishnasrivarshini@gmail.com" 
+  },
+  {
+    "name": "Riya Sharma",
+    "rank": "Lieutenant",
+    "branch": "Army",
+    "service_id": "IC-562314B",
+    "email": "riya.sharma@indianarmy.nic.in"
+  },
+  {
+    "name": "Rahul Verma",
+    "rank": "Major",
+    "branch": "Army",
+    "service_id": "IC-673214C",
+    "email": "rahul.verma@indianarmy.nic.in"
+  },
+  {
+    "name": "Sneha Kulkarni",
+    "rank": "Captain",
+    "branch": "Army",
+    "service_id": "IC-784325D",
+    "email": "sneha.kulkarni@indianarmy.nic.in"
+  },
+  {
+    "name": "Amit Yadav",
+    "rank": "Lieutenant",
+    "branch": "Army",
+    "service_id": "IC-895436E",
+    "email": "amit.yadav@indianarmy.nic.in"
+  },
+
+  {
+    "name": "Vikram Singh",
+    "rank": "Commander",
+    "branch": "Navy",
+    "service_id": "IN-774512A",
+    "email": "vikram.singh@indiannavy.nic.in"
+  },
+  {
+    "name": "Neha Reddy",
+    "rank": "Lt Cmdr",
+    "branch": "Navy",
+    "service_id": "IN-663298B",
+    "email": "minnuharsha0505@gmail.com"
+  },
+  {
+    "name": "Kunal Das",
+    "rank": "Sub Lieutenant",
+    "branch": "Navy",
+    "service_id": "IN-552187C",
+    "email": "kunal.das@indiannavy.nic.in"
+  },
+  {
+    "name": "Priya Nair",
+    "rank": "Commander",
+    "branch": "Navy",
+    "service_id": "IN-441276D",
+    "email": "priya.nair@indiannavy.nic.in"
+  },
+  {
+    "name": "Rohit Kapoor",
+    "rank": "Lt Cmdr",
+    "branch": "Navy",
+    "service_id": "IN-330165E",
+    "email": "rohit.kapoor@indiannavy.nic.in"
+  },
+
+  {
+    "name": "Karan Patel",
+    "rank": "Flight Lt",
+    "branch": "Air Force",
+    "service_id": "AF-992145A",
+    "email": "nukavarapusahithi@gmail.com"
+  },
+  {
+    "name": "Sneha Iyer",
+    "rank": "Squadron Ldr",
+    "branch": "Air Force",
+    "service_id": "AF-881237B",
+    "email": "jenniaspinki987@gmail.com"
+  },
+  {
+    "name": "Aditya Rao",
+    "rank": "Flying Officer",
+    "branch": "Air Force",
+    "service_id": "AF-770329C",
+    "email": "veerlavarshini1@gmail.com"
+  },
+  {
+    "name": "Pooja Singh",
+    "rank": "Flight Lt",
+    "branch": "Air Force",
+    "service_id": "AF-659421D",
+    "email": "brahmaniparchuri09@gmail.com"
+  },
+  {
+    "name": "Manish Gupta",
+    "rank": "Squadron Ldr",
+    "branch": "Air Force",
+    "service_id": "AF-548507E",
+    "email": "minnuharsha0505@gmail.com"
+  }
+]

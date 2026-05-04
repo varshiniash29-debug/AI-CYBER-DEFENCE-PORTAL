@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Incident — National Cyber Defence Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .incident-type-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      margin-top: 12px;
+    }
+    .incident-type-card {
+      position: relative;
+      display: block;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 18px;
+      background: #fff;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+      min-height: 138px;
+    }
+    .incident-type-card:hover {
+      border-color: #7c3aed;
+      box-shadow: 0 12px 28px rgba(124, 58, 237, 0.12);
+      transform: translateY(-1px);
+    }
+    .incident-type-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .incident-type-card .card-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+    .incident-type-card .card-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .incident-type-card .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .incident-type-card .card-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #475569;
+    }
+    .incident-type-card input:checked + .card-inner {
+      border-radius: 14px;
+      background: #eef2ff;
+      border-color: #7c3aed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-strip">Government of India &nbsp;|&nbsp; Ministry of Defence &nbsp;|&nbsp; Cyber Security Division</div>
+
+  <header>
+    <div class="header-inner">
+      <svg class="emblem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" stroke="#c8922a" stroke-width="2" fill="none"/>
+        <circle cx="32" cy="32" r="22" stroke="#c8922a" stroke-width="1" fill="none"/>
+        <circle cx="32" cy="32" r="5" fill="#c8922a"/>
+        <line x1="32" y1="10" x2="32" y2="27" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="32" y1="37" x2="32" y2="54" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="10" y1="32" x2="27" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="37" y1="32" x2="54" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="17.4" y1="17.4" x2="28.8" y2="28.8" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="35.2" y1="35.2" x2="46.6" y2="46.6" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="46.6" y1="17.4" x2="35.2" y2="28.8" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="28.8" y1="35.2" x2="17.4" y2="46.6" stroke="#c8922a" stroke-width="1.2"/>
+      </svg>
+      <div class="header-text">
+        <h1>National Cyber Defence Portal</h1>
+        <div class="subtitle">For Defence Personnel &amp; Their Families &nbsp;·&nbsp; Restricted Access</div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html">Home</a>
+      <a href="auth.html">Login / Register</a>
+      <a href="report.html" class="active">Report Incident</a>
+      <a href="result.html">Check Status</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </nav>
+
+  <div class="notice-bar">RESTRICTED — Session active. Report will be submitted under your authenticated personnel ID.</div>
+  <div class="alert alert-success" id="reporterBanner" style="display:none; margin: 0 24px 12px;">
+    Logged in as <strong id="reporterNameDisplay"></strong> (<span id="reporterIdDisplay"></span>)
+  </div>
+  <div class="secure-strip">
+    <span>&#9679; SECURE</span>SSL/TLS Encrypted Connection &nbsp;|&nbsp; Session ID: NCDP/SES/2026/04/874231
+  </div>
+
+  <main>
+    <div class="page-title">
+      <div class="breadcrumb"><a href="index.html">Home</a> &rsaquo; <a href="auth.html">Login</a> &rsaquo; Report Incident</div>
+      <h2>Report a Cyber Incident</h2>
+      <p>Submit details of the suspicious content for immediate threat analysis</p>
+    </div>
+
+    <div style="max-width: 700px; margin: 0 auto;">
+
+      <div class="alert alert-info">
+        <strong>Confidential:</strong> All submissions are encrypted and accessible only to authorised DCERT analysts. Provide as much detail as possible to enable accurate threat assessment.
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Incident Details</h2>
+          <p>All fields marked * are mandatory</p>
+        </div>
+
+        <form id="reportForm" onsubmit="handleReport(event)" novalidate>
+
+          <div class="form-group">
+            <label>Type of Incident <span class="required">*</span></label>
+            <div class="incident-type-grid">
+              <label class="incident-type-card">
+                <input type="radio" name="incidentType" value="url" required onchange="switchInputType(this.value)">
+                <div class="card-inner">
+                  <div>
+                    <div class="card-icon">🔗</div>
+                    <div class="card-title">URL / Link</div>
+                    <div class="card-desc">Web address or hyperlink</div>
+                  </div>
+                </div>
+              </label>
+              <label class="incident-type-card">
+                <input type="radio" name="incidentType" value="message" onchange="switchInputType(this.value)">
+                <div class="card-inner">
+                  <div>
+                    <div class="card-icon">💬</div>
+                    <div class="card-title">Text / SMS</div>
+                    <div class="card-desc">Message, SMS or chat content</div>
+                  </div>
+                </div>
+              </label>
+             
+              
+             
+             
+            </div>
+          </div>
+
+          <div id="dynamicZone" style="display:none;">
+            <div id="mlNotice" class="alert alert-info" style="display:none; font-size:13px; padding:10px 14px;">
+              <strong>ℹ️ AI Analysis Note:</strong> Our threat detection model is trained on text data. Please provide a detailed written description of the incident below — the more specific you are, the more accurate the risk assessment will be. Upload your file/screenshot as evidence separately.
+            </div>
+
+            <div id="urlInput" style="display:none;">
+              <div class="form-group">
+                <label for="suspiciousUrl">Suspicious URL / Link <span class="required">*</span></label>
+                <input type="text" id="suspiciousUrl" name="suspiciousUrl" placeholder="Paste the full URL here (e.g. https://...)">
+                <div class="form-hint">Copy and paste the exact URL. Do not click on it.</div>
+              </div>
+            </div>
+
+            <div id="messageInput" style="display:none;">
+              <div class="form-group">
+                <label for="suspiciousMessage">Suspicious Message Content <span class="required">*</span></label>
+                <textarea id="suspiciousMessage" name="suspiciousMessage" rows="5" placeholder="Paste or type the full suspicious message content here..."></textarea>
+                <div class="form-hint">Include the full message text. Do not edit or paraphrase.</div>
+              </div>
+              <div class="form-group">
+                <label for="senderInfo">Sender Information (if available)</label>
+                <input type="text" id="senderInfo" name="senderInfo" placeholder="Phone number, email address, username, etc.">
+              </div>
+            </div>
+
+            <div id="fileInput" style="display:none;">
+              <div class="form-group">
+                <label for="suspiciousFile">Upload Suspicious File <span class="required">*</span></label>
+                <div style="border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 20px; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('fileUpload').click()">
+                  <div style="font-size:28px; margin-bottom:8px;">&#128193;</div>
+                  <div style="font-size:14px; color: var(--text-secondary); margin-bottom:4px;">Click to select file, or drag and drop</div>
+                  <div style="font-size:12px; color: var(--text-muted);" id="fileLabel">Accepted: .pdf, .doc, .docx, .jpg, .png, .zip, .apk (Max 10MB)</div>
+                  <input type="file" id="fileUpload" name="fileUpload" style="display:none;" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.zip,.apk" onchange="updateFileLabel(this)">
+                </div>
+              </div>
+              <div class="alert alert-high" style="font-size:13px; padding:10px 14px;">
+                <strong>Warning:</strong> Do not open or execute the suspicious file. Upload it as-is.
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="incidentDate">Date &amp; Time of Incident <span class="required">*</span></label>
+            <input type="datetime-local" id="incidentDate" name="incidentDate" required>
+            <div class="form-hint">Select the date and time when you encountered the incident.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="platform">Platform / Medium</label>
+            <select id="platform" name="platform">
+              <option value="">-- Select platform (optional) --</option>
+              <option value="email">Email</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="sms">SMS</option>
+              <option value="telegram">Telegram</option>
+              <option value="facebook">Facebook</option>
+              <option value="instagram">Instagram</option>
+            
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description" id="descriptionLabel">Additional Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Describe what happened, any actions you may have already taken, and any other relevant details..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="evidenceUpload">Upload Evidence (Screenshots/Documents) <span class="required">*</span></label>
+            <div class="evidence-box" onclick="document.getElementById('evidenceFile').click()" style="border: 2px dashed var(--border); border-radius: var(--radius); padding: 15px; text-align: center; background: #f8fafc; cursor: pointer;">
+              <div style="font-size:20px;">&#128444;</div>
+              <div style="font-size:13px; color: var(--text-secondary);" id="evidenceLabel">Click to upload screenshot or document</div>
+              <input type="file" id="evidenceFile" name="evidenceFile" style="display:none;" accept="image/*,.pdf,.doc,.docx" onchange="updateEvidenceLabel(this)" required>
+            </div>
+            <div class="form-hint">Supported formats: JPG, PNG, PDF, DOC.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="impact">Impact Assessment <span class="required">*</span></label>
+            <select id="impact" name="impact" required>
+              <option value="" disabled selected>-- Select impact level --</option>
+              <option value="none">No impact yet (proactive report)</option>
+              <option value="data">Personal data may have been exposed</option>
+              <option value="financial">Financial loss incurred</option>
+              <option value="access">Unauthorised account access occurred</option>
+              <option value="device">Device may be compromised</option>
+              <option value="official">Official / classified information at risk</option>
+            </select>
+          </div>
+
+          <hr>
+
+          <div class="form-group" style="display:flex; gap:10px; align-items:flex-start;">
+            <input type="checkbox" id="declaration" name="declaration" style="width:auto; margin-top:3px;" required>
+            <label for="declaration" style="font-weight:400; font-size:13px; color: var(--text-secondary);">
+              I hereby declare that all information provided above is true and accurate to the best of my knowledge.
+              I understand that providing false information is a punishable offence under the IT Act, 2000.
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:8px;">
+            Submit Incident Report
+          </button>
+
+          <p style="font-size:12px; color:#6b7e91; text-align:center; margin-top:14px;">
+            A unique Reference Number will be generated upon submission. Retain it for tracking.
+          </p>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <strong>National Cyber Defence Portal</strong> &nbsp;|&nbsp; Ministry of Defence, Government of India<br>
+    <span style="margin-top:4px; display:block;">For official use only. Unauthorized access is a criminal offence under the IT Act, 2000.</span>
+  </footer>
+
+  <script>
+    function switchInputType(type) {
+      const zone = document.getElementById('dynamicZone');
+      const urlEl = document.getElementById('urlInput');
+      const msgEl = document.getElementById('messageInput');
+      const fileEl = document.getElementById('fileInput');
+      const mlNotice = document.getElementById('mlNotice');
+      const descLabel = document.getElementById('descriptionLabel');
+
+      zone.style.display = 'block';
+      urlEl.style.display = 'none';
+      msgEl.style.display = 'none';
+      fileEl.style.display = 'none';
+      mlNotice.style.display = 'none';
+
+      if (type === 'url') {
+        urlEl.style.display = 'block';
+        descLabel.innerHTML = 'Additional Description';
+      } else if (type === 'message') {
+        msgEl.style.display = 'block';
+        descLabel.innerHTML = 'Additional Description';
+      } else if (['image', 'document'].includes(type)) {
+        fileEl.style.display = 'block';
+        mlNotice.style.display = 'block';
+        descLabel.innerHTML = 'Describe the Incident <span class="required">*</span> <span style="font-size:12px; color:#1e40af;">(Used for AI analysis — be specific)</span>';
+      } else if (['call', 'financial'].includes(type)) {
+        mlNotice.style.display = 'block';
+        descLabel.innerHTML = 'Describe the Incident <span class="required">*</span> <span style="font-size:12px; color:#1e40af;">(Used for AI analysis — be specific)</span>';
+      } else {
+        zone.style.display = 'none';
+      }
+    }
+
+    function updateFileLabel(input) {
+      const label = document.getElementById('fileLabel');
+      if (input.files && input.files[0]) {
+        const f = input.files[0];
+        const sizeMB = (f.size / (1024 * 1024)).toFixed(2);
+        label.textContent = 'Selected: ' + f.name + ' (' + sizeMB + ' MB)';
+        label.style.color = '#166534';
+      }
+    }
+
+    function updateEvidenceLabel(input) {
+      const label = document.getElementById('evidenceLabel');
+      if (input.files && input.files[0]) {
+        label.textContent = 'Selected: ' + input.files[0].name;
+        label.style.color = '#166534';
+      }
+    }
+
+    function readFileAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('File reading error'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function getStoredReporter() {
+      return {
+        name: localStorage.getItem('reporterName') || 'Authenticated Reporter',
+        pid: localStorage.getItem('personnelId') || 'NCDP-USER'
+      };
+    }
+
+    function populateReporterInfo() {
+      const reporter = getStoredReporter();
+      if (reporter.name && reporter.pid) {
+        document.getElementById('reporterNameDisplay').textContent = reporter.name;
+        document.getElementById('reporterIdDisplay').textContent = reporter.pid;
+        document.getElementById('reporterBanner').style.display = 'block';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', populateReporterInfo);
+
+    async function handleReport(e) {
+      e.preventDefault();
+
+      const decl = document.getElementById('declaration');
+      if (!decl.checked) {
+        alert('Please read and accept the declaration before submitting.');
+        return;
+      }
+
+      const selectedIncidentType = document.querySelector('input[name="incidentType"]:checked');
+      const incidentType = selectedIncidentType ? selectedIncidentType.value : '';
+      if (!incidentType) {
+        alert('Please select the type of incident.');
+        return;
+      }
+
+      const impact = document.getElementById('impact').value;
+      if (!impact) {
+        alert('Please select the impact level.');
+        return;
+      }
+
+      const evidence = document.getElementById('evidenceFile').files.length;
+      if (evidence === 0) {
+        alert('Please upload evidence (screenshot or document).');
+        return;
+      }
+
+      let textToAnalyse = '';
+      if (incidentType === 'url') {
+        textToAnalyse = document.getElementById('suspiciousUrl').value.trim();
+        if (!textToAnalyse) { alert('Please enter the suspicious URL.'); return; }
+      } else if (incidentType === 'message') {
+        textToAnalyse = document.getElementById('suspiciousMessage').value.trim();
+        if (!textToAnalyse) { alert('Please enter the suspicious message content.'); return; }
+      } else {
+        textToAnalyse = document.getElementById('description').value.trim();
+        if (!textToAnalyse) {
+          alert('Please provide a detailed description of the incident. This is used by the AI model for threat analysis since your incident type does not contain text that can be directly analyzed.');
+          return;
+        }
+      }
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Analyzing...';
+
+      try {
+        const evidenceFileInput = document.getElementById('evidenceFile');
+        const evidenceFile = evidenceFileInput.files.length ? evidenceFileInput.files[0] : null;
+        const evidenceName = evidenceFile ? evidenceFile.name : '';
+        let evidenceImage = '';
+        if (evidenceFile && evidenceFile.type.startsWith('image/')) {
+          evidenceImage = await readFileAsDataURL(evidenceFile);
+        }
+
+        const reporter = getStoredReporter();
+        const res = await fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: textToAnalyse,
+            type: incidentType,
+            platform: document.getElementById('platform').value,
+            impact: impact,
+            description: document.getElementById('description').value.trim(),
+            incidentDate: document.getElementById('incidentDate').value,
+            evidenceFile: evidenceName,
+            evidenceImage,
+            reporterName: reporter.name,
+            personnelId: reporter.pid
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || data.message || 'Server returned ' + res.status);
+        }
+
+        const params = new URLSearchParams({
+          risk:       data.risk,
+          prediction: data.prediction,
+          confidence: data.confidence,
+          type:       incidentType
+        });
+        // STORE DATA FOR RESULT PAGE
+localStorage.setItem("reporterName", reporter.name);
+localStorage.setItem("personnelId", reporter.pid);
+localStorage.setItem("reporterEmail", "N/A"); // optional if no input
+
+localStorage.setItem("incidentType", incidentType);
+localStorage.setItem("incidentDescription", document.getElementById("description").value.trim());
+
+if (evidenceFile) {
+  localStorage.setItem("evidenceFile", evidenceFile.name);
+}
+
+        window.location.href = 'result.html?' + params.toString();
+
+      } catch (err) {
+        console.error('Prediction error:', err);
+        alert('Could not connect to the analysis server.\nPlease make sure the Flask backend is running on port 5000.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
+    
+  </script>
+
+</body>
+</html>

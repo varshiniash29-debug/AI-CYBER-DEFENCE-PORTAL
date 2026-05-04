@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register — National Cyber Defence Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="top-strip">Government of India &nbsp;|&nbsp; Ministry of Defence &nbsp;|&nbsp; Cyber Security Division</div>
+
+  <header>
+    <div class="header-inner">
+      <svg class="emblem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" stroke="#c8922a" stroke-width="2" fill="none"/>
+        <circle cx="32" cy="32" r="22" stroke="#c8922a" stroke-width="1" fill="none"/>
+        <circle cx="32" cy="32" r="5" fill="#c8922a"/>
+        <line x1="32" y1="10" x2="32" y2="27" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="32" y1="37" x2="32" y2="54" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="10" y1="32" x2="27" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="37" y1="32" x2="54" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="17.4" y1="17.4" x2="28.8" y2="28.8" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="35.2" y1="35.2" x2="46.6" y2="46.6" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="46.6" y1="17.4" x2="35.2" y2="28.8" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="28.8" y1="35.2" x2="17.4" y2="46.6" stroke="#c8922a" stroke-width="1.2"/>
+      </svg>
+      <div class="header-text">
+        <h1>National Cyber Defence Portal</h1>
+        <div class="subtitle">For Defence Personnel &amp; Their Families &nbsp;·&nbsp; Restricted Access</div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html">Home</a>
+      <a href="auth.html" class="active">Login / Register</a>
+      <a href="report.html">Report Incident</a>
+      <a href="result.html">Check Status</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </nav>
+
+  <div class="notice-bar">RESTRICTED — Authorised users only. All access attempts are logged.</div>
+
+  <div class="secure-strip">
+    <span>&#9679; SECURE</span>SSL/TLS Encrypted Connection &nbsp;|&nbsp; Session ID will be issued after successful authentication
+  </div>
+
+  <main>
+    <div class="page-title">
+      <div class="breadcrumb"><a href="index.html">Home</a> &rsaquo; Login / Register</div>
+      <h2>Personnel Authentication</h2>
+      <p>Verify your identity to access the Incident Reporting System</p>
+    </div>
+
+    <div style="max-width: 580px; margin: 0 auto;">
+
+      <div class="alert alert-info">
+        Access is restricted to active or retired Indian Defence Personnel (Army, Navy, Air Force, DRDO, MES, BSF, CRPF, and allied services) and their immediate family members.
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Secure Login / Registration</h2>
+          <p>Complete all fields. OTP will be sent to your registered email or mobile.</p>
+        </div>
+
+        <form id="authForm" onsubmit="handleSubmit(event)" novalidate>
+
+          <!-- Name -->
+          <div class="form-group">
+            <label for="fullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="fullName" name="fullName" placeholder="As per official service record" autocomplete="name" required>
+          </div>
+
+          <!-- Defence Login ID -->
+          <div class="form-group">
+            <label for="defenceId">Defence Personnel Login ID <span class="required">*</span></label>
+            <input type="text" id="defenceId" name="defenceId"
+                   placeholder="e.g. IC/IN/AF-XXXXXXX"
+                   required>
+            <div class="form-hint">Your official service/personnel number issued by the Ministry of Defence.</div>
+          </div>
+
+          <!-- Relationship -->
+          <div class="form-group">
+            <label for="relationship">Relationship to Defence Personnel <span class="required">*</span></label>
+            <select id="relationship" name="relationship" required>
+              <option value="" disabled selected>-- Select relationship --</option>
+              <option value="self">Self (Active Service)</option>
+              <option value="self-retired">Self (Retired)</option>
+              <option value="spouse">Spouse</option>
+              <option value="child">Son / Daughter</option>
+              <option value="parent">Parent</option>
+              <option value="sibling">Sibling (Dependent)</option>
+            </select>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Official / Registered Email ID <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="yourname@example.com" autocomplete="email" required>
+            <div class="form-hint">Must match the email linked to your Defence ID.</div>
+          </div>
+
+          <hr>
+
+          <!-- OTP -->
+          <div class="form-group">
+            <label for="otp">One-Time Password (OTP) <span class="required">*</span></label>
+            <div class="otp-row">
+              <input type="text" id="otp" name="otp" placeholder="Enter 6-digit OTP" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required>
+              <button type="button" class="btn btn-secondary" id="sendOtpBtn" onclick="sendOTP()">Send OTP</button>
+            </div>
+            <div class="form-hint" id="otpHint">OTP is valid for <strong>4 minutes</strong> only. Do not share with anyone.</div>
+          </div>
+
+          <!-- CAPTCHA -->
+          <div class="form-group">
+            <label>Security Verification (CAPTCHA) <span class="required">*</span></label>
+            <div class="captcha-box">
+              <div class="captcha-img" id="captchaDisplay" aria-label="CAPTCHA code">3K9XQ</div>
+              <button type="button" onclick="refreshCaptcha()" class="btn btn-secondary btn-sm" style="font-size:12px;">&#8635; Refresh</button>
+            </div>
+            <input type="text" id="captchaInput" name="captcha" placeholder="Type the characters shown above" style="margin-top:10px;" required>
+          </div>
+
+          <!-- Submit -->
+          <div style="margin-top:8px;">
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+              Verify &amp; Proceed to Portal
+            </button>
+          </div>
+
+          <p style="font-size:12px; color:#6b7e91; text-align:center; margin-top:16px;">
+            By continuing, you agree that all information provided is true and accurate. False submissions are punishable under the IT Act, 2000.
+          </p>
+
+        </form>
+      </div>
+
+      <!-- HELP BOX -->
+      <div class="card-sm" style="margin-top:20px; border-top: 3px solid #c8922a;">
+        <h3 style="font-size:14px; font-weight:600; color:#0a1628; margin-bottom:10px;">Need Help?</h3>
+        <p style="font-size:13px; color:#6b7e91; line-height:1.7;">
+          For login issues or if your Defence ID is not recognised, contact your unit's Records / Establishment section
+          or email <strong style="color:#1a56a0;">support-ncdp@mod.gov.in</strong>. Helpline: <strong style="color:#1a56a0;">1800-XXX-YYYY</strong> (Mon–Sat, 09:00–17:30 IST).
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <strong>National Cyber Defence Portal</strong> &nbsp;|&nbsp; Ministry of Defence, Government of India<br>
+    <span style="margin-top:4px; display:block;">For official use only. Unauthorized access is a criminal offence under the IT Act, 2000.</span>
+  </footer>
+
+  <script>
+    const captchas = ['3K9XQ','7M2PL','ZW4RT','B8NVJ','Y5CXK','D3QHR'];
+    let currentCaptcha = '3K9XQ';
+    let otpTimer = null;
+    let otpSeconds = 240;
+
+    function refreshCaptcha() {
+      currentCaptcha = captchas[Math.floor(Math.random() * captchas.length)];
+      document.getElementById('captchaDisplay').textContent = currentCaptcha;
+    }
+
+    async function sendOTP() {
+      console.log("OTP button clicked");
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const defenceId = document.getElementById('defenceId').value.trim();
+
+      // ✅ Both Defence ID and Email must be filled before sending OTP
+      if (!defenceId) {
+        alert("Please enter your Defence Personnel ID first.");
+        return;
+      }
+      if (!email) {
+        alert("Please enter your registered email first.");
+        return;
+      }
+
+      const btn = document.getElementById('sendOtpBtn');
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+
+      try {
+        const res = await fetch("http://127.0.0.1:5000/send-otp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          // ✅ Send BOTH defence_id and email to backend for validation
+          body: JSON.stringify({ defence_id: defenceId, email: email })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          btn.textContent = "OTP Sent";
+          startOTPTimer();
+          alert("OTP sent successfully. Please check your registered email (check Primary inbox).");
+        } else {
+          throw new Error(data.message || 'OTP send failed');
+        }
+
+      } catch (err) {
+        alert("Failed to send OTP: " + (err.message || 'Unknown error'));
+        btn.disabled = false;
+        btn.textContent = "Send OTP";
+        console.error(err);
+      }
+    }
+
+    function startOTPTimer() {
+      otpSeconds = 240;
+      updateHint();
+      otpTimer = setInterval(() => {
+        otpSeconds--;
+        updateHint();
+        if (otpSeconds <= 0) {
+          clearInterval(otpTimer);
+          document.getElementById('otpHint').innerHTML = 'OTP has <strong style="color:#b91c1c;">expired</strong>. Please request a new one.';
+          const btn = document.getElementById('sendOtpBtn');
+          btn.disabled = false;
+          btn.textContent = 'Resend OTP';
+        }
+      }, 1000);
+    }
+
+    function updateHint() {
+      const m = Math.floor(otpSeconds / 60);
+      const s = otpSeconds % 60;
+      document.getElementById('otpHint').innerHTML =
+        'OTP expires in <strong>' + m + ':' + String(s).padStart(2, '0') + '</strong>. Do not share with anyone.';
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const inputId = document.getElementById("defenceId").value.trim();
+      const inputEmail = document.getElementById("email").value.trim().toLowerCase();
+      const captchaIn = document.getElementById('captchaInput').value.trim().toUpperCase();
+
+      // Step 1: Basic validation
+      if (!inputId || !inputEmail) {
+        alert("Enter Defence ID and Email");
+        return;
+      }
+
+      // Step 2: CAPTCHA check
+      if (captchaIn !== currentCaptcha) {
+        alert('CAPTCHA does not match. Please try again.');
+        refreshCaptcha();
+        document.getElementById('captchaInput').value = '';
+        return;
+      }
+
+      try {
+        const response = await fetch("defence_dataset.json");
+
+        if (!response.ok) {
+          throw new Error("File not found or wrong path");
+        }
+
+        const data = await response.json();
+
+        // Step 3: Match BOTH ID + Email
+        const user = data.find(person =>
+          person.service_id === inputId &&
+          person.email.toLowerCase() === inputEmail
+        );
+
+        if (!user) {
+          alert("Defence ID and Email do not match");
+          return;
+        }
+
+        const otpInput = document.getElementById("otp").value;
+
+        localStorage.setItem('reporterName', document.getElementById('fullName').value.trim());
+        localStorage.setItem('personnelId', inputId);
+        localStorage.setItem('reporterEmail', inputEmail);
+
+        const verifyRes = await fetch("http://127.0.0.1:5000/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: inputEmail,
+            otp: otpInput
+          })
+        });
+
+        const verifyData = await verifyRes.json();
+
+        if (!verifyData.success) {
+          alert("Invalid OTP");
+          return;
+        }
+
+        window.location.href = 'report.html';
+
+      } catch (error) {
+        alert("Error loading data");
+        console.error(error);
+      }
+    }
+    
+  </script>
+
+</body>
+</html>

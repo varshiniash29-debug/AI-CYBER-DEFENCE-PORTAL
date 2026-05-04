@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — National Cyber Defence Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #0d1520; }
+    .admin-login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .dashboard-page { display: none; background: var(--bg); }
+    .dashboard-page.visible { display: block; }
+    .admin-bar {
+      background: #0f1f36;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #c8922a;
+    }
+    .admin-bar .portal-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #8fa8c0;
+      letter-spacing: 0.04em;
+    }
+    .admin-bar .admin-user {
+      font-size: 13px;
+      color: #6b8099;
+    }
+    .admin-bar .admin-user strong { color: #8fa8c0; }
+  </style>
+</head>
+<body>
+
+  <!-- ══ ADMIN LOGIN ══ -->
+  <div id="loginPage">
+    <div style="background:#0a1628; padding:10px 24px; text-align:center; font-size:12px; color:#3d5574; letter-spacing:0.06em; border-bottom:1px solid #132240;">
+      GOVERNMENT OF INDIA &nbsp;|&nbsp; MINISTRY OF DEFENCE &nbsp;|&nbsp; CYBER SECURITY DIVISION
+    </div>
+    <div class="admin-login-wrap">
+      <div style="width:100%; max-width:420px;">
+        <!-- Emblem -->
+        <div style="text-align:center; margin-bottom:24px;">
+          <svg width="60" height="60" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="32" cy="32" r="30" stroke="#c8922a" stroke-width="2" fill="none"/>
+            <circle cx="32" cy="32" r="22" stroke="#c8922a" stroke-width="1" fill="none"/>
+            <circle cx="32" cy="32" r="5" fill="#c8922a"/>
+            <line x1="32" y1="10" x2="32" y2="27" stroke="#c8922a" stroke-width="1.2"/>
+            <line x1="32" y1="37" x2="32" y2="54" stroke="#c8922a" stroke-width="1.2"/>
+            <line x1="10" y1="32" x2="27" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+            <line x1="37" y1="32" x2="54" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+          </svg>
+          <div style="font-size:18px; font-weight:700; color:#c8d8e8; margin-top:12px; line-height:1.3;">National Cyber Defence Portal</div>
+          <div style="font-size:11px; color:#4a6480; text-transform:uppercase; letter-spacing:0.1em; margin-top:4px;">Administrator Access &nbsp;— Authorised Personnel Only</div>
+        </div>
+
+        <div style="background:#132240; border:1px solid #1e3a5f; border-top: 3px solid #c8922a; border-radius:10px; padding:28px 28px;">
+          <h2 style="font-size:16px; font-weight:600; color:#c8d8e8; margin-bottom:6px;">Admin Login</h2>
+          <p style="font-size:12px; color:#4a6480; margin-bottom:24px;">Restricted — DCERT &amp; Authorised Analysts Only</p>
+
+          <form id="adminLoginForm" onsubmit="adminLogin(event)" novalidate>
+            <div class="form-group">
+              <label for="adminId" style="color:#8fa8c0;">Admin ID <span class="required">*</span></label>
+              <input type="text" id="adminId" placeholder="e.g. DCERT-ADMIN-001" style="background:#0f1f36; border-color:#1e3a5f; color:#c8d8e8;" required>
+            </div>
+            <div class="form-group">
+              <label for="adminPass" style="color:#8fa8c0;">Password <span class="required">*</span></label>
+              <input type="password" id="adminPass" placeholder="Enter admin password" style="background:#0f1f36; border-color:#1e3a5f; color:#c8d8e8;" required>
+            </div>
+            <div class="form-group">
+              <label for="adminOtp" style="color:#8fa8c0;">OTP (2FA) <span class="required">*</span></label>
+              <div class="otp-row">
+                <input type="text" id="adminOtp" placeholder="6-digit OTP" maxlength="6" inputmode="numeric" style="background:#0f1f36; border-color:#1e3a5f; color:#c8d8e8;" required>
+                <button type="button" class="btn btn-secondary btn-sm" id="adminSendOtpBtn" style="border-color:#1e3a5f; color:#8fa8c0; white-space:nowrap;" onclick="sendAdminOTP()">Send OTP</button>
+              </div>
+              <div style="font-size:12px; color:#4a6480; margin-top:6px;" id="adminOtpHint"></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;" id="adminLoginBtn">Login to Dashboard</button>
+          </form>
+
+          <p style="font-size:11px; color:#3d5574; text-align:center; margin-top:16px;">
+            Unauthorised access attempts are logged and prosecuted under the IT Act, 2000.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div id="dashboardPage" class="dashboard-page">
+
+    <div class="admin-bar">
+      <div class="portal-name">&#128737; NCDP Admin Console</div>
+      <div class="admin-user">Logged in as: <strong id="loggedInAdmin">DCERT-ADMIN-001</strong> &nbsp;|&nbsp; <a href="#" onclick="logout()" style="color:#c8922a; text-decoration:none; font-size:13px;">Logout</a></div>
+    </div>
+
+    <div style="background:#132240; padding:10px 24px; font-size:12px; color:#4a6480; border-bottom:1px solid #1e3a5f;">
+      Last login: <strong style="color:#6b8099;">13 Apr 2024, 09:14 IST</strong> &nbsp;|&nbsp; Session expires in: <strong style="color:#6b8099;" id="sessionTimer">30:00</strong>
+    </div>
+
+    <div style="background: var(--bg); min-height: 100vh; padding: 28px 24px;">
+      <div style="max-width: 1180px; margin: 0 auto;">
+
+        <div class="page-title">
+          <h2>Incident Management Dashboard</h2>
+          <p>Overview of all submitted cyber incident reports</p>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num" id="sTotal">147</div>
+            <div class="stat-label">Total Cases</div>
+          </div>
+          <div class="stat-card stat-high">
+            <div class="stat-num" id="sHigh">32</div>
+            <div class="stat-label">High Risk</div>
+          </div>
+          <div class="stat-card stat-medium">
+            <div class="stat-num" id="sMedium">61</div>
+            <div class="stat-label">Medium Risk</div>
+          </div>
+          <div class="stat-card stat-low">
+            <div class="stat-num" id="sLow">54</div>
+            <div class="stat-label">Low Risk</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:#1a56a0;" id="sOpen">18</div>
+            <div class="stat-label">Open Cases</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:#166534;" id="sResolved">129</div>
+            <div class="stat-label">Resolved</div>
+          </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="section-head" style="margin-bottom:16px;">
+            <h3>Filter Complaints</h3>
+            <button class="btn btn-secondary btn-sm" onclick="resetFilters()">Reset Filters</button>
+          </div>
+          <div class="filter-row">
+            <select id="filterRisk" onchange="applyFilters()">
+              <option value="">All Risk Levels</option>
+              <option value="High">High Risk</option>
+              <option value="Medium">Medium Risk</option>
+              <option value="Low">Low Risk</option>
+            </select>
+            <select id="filterType" onchange="applyFilters()">
+              <option value="">All Incident Types</option>
+              <option value="URL">Suspicious URL</option>
+              <option value="Message">Suspicious Message</option>
+              <option value="File">Suspicious File</option>
+              <option value="Financial">Financial Fraud</option>
+              <option value="Account">Account Compromise</option>
+            </select>
+            <select id="filterStatus" onchange="applyFilters()">
+              <option value="">All Statuses</option>
+              <option value="Open">Open</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Escalated">Escalated</option>
+            </select>
+            <input type="text" id="filterDate" placeholder="Filter by date (DD/MM/YYYY)" style="min-width:180px;" oninput="applyFilters()">
+            <input type="text" id="filterSearch" placeholder="Search name / ref no." style="min-width:180px;" oninput="applyFilters()">
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="card">
+          <div class="section-head">
+            <h3>Complaints Register <span id="rowCount" style="font-size:13px; font-weight:400; color: var(--text-muted); margin-left:8px;"></span></h3>
+            <button class="btn btn-secondary btn-sm" onclick="alert('Export functionality requires backend integration.')">&#8659; Export CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table id="complaintsTable">
+              <thead>
+                <tr>
+                  <th>Ref. No.</th>
+                  <th>Name</th>
+                  <th>Personnel ID</th>
+                  <th>Incident Type</th>
+                  <th>Risk Level</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- populated by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div style="text-align:center; padding:16px; font-size:13px; color: var(--text-muted);" id="noResults" style="display:none;">No records match the selected filters.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND = "http://127.0.0.1:5000";
+
+    let complaints = [];
+    let filtered = [];
+    let currentAdminId = '';
+
+    // ── Fetch real reports from backend ───────────────────────────────
+    async function loadReports() {
+      try {
+        const res = await fetch(`${BACKEND}/reports`);
+        const data = await res.json();
+        // Normalise field names from backend → table format
+        complaints = data.map(r => ({
+          ref:    r.ref    || '—',
+          name:   r.name   || '—',
+          pid:    r.pid    || '—',
+          type:   r.type   || '—',
+          risk:   r.risk   ? (r.risk.charAt(0).toUpperCase() + r.risk.slice(1).toLowerCase()) : 'Low',
+          status: r.status || 'Open',
+          date:   r.date   || '—',
+          // keep full record for View modal
+          _raw: r
+        }));
+        filtered = [...complaints];
+        updateStats(complaints);
+        renderTable(filtered);
+      } catch (err) {
+        console.error('Failed to load reports:', err);
+      }
+    }
+
+    function updateStats(data) {
+      document.getElementById('sTotal').textContent    = data.length;
+      document.getElementById('sHigh').textContent     = data.filter(r => r.risk === 'High').length;
+      document.getElementById('sMedium').textContent   = data.filter(r => r.risk === 'Medium').length;
+      document.getElementById('sLow').textContent      = data.filter(r => r.risk === 'Low').length;
+      document.getElementById('sOpen').textContent     = data.filter(r => r.status === 'Open').length;
+      document.getElementById('sResolved').textContent = data.filter(r => r.status === 'Resolved').length;
+    }
+
+    // ── OTP: send to backend ──────────────────────────────────────────
+    async function sendAdminOTP() {
+      const adminId = document.getElementById('adminId').value.trim();
+      const password = document.getElementById('adminPass').value.trim();
+
+      if (!adminId || !password) {
+        alert('Please enter Admin ID and Password before requesting OTP.');
+        return;
+      }
+
+      const btn = document.getElementById('adminSendOtpBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch(`${BACKEND}/admin-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ admin_id: adminId, password: password })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          currentAdminId = adminId;
+          btn.textContent = 'OTP Sent ✓';
+          startAdminOtpTimer();
+          alert('OTP sent to the registered admin email. Please check your inbox.');
+        } else {
+          alert('Error: ' + (data.message || 'Could not send OTP. Check Admin ID and Password.'));
+          btn.disabled = false;
+          btn.textContent = 'Send OTP';
+        }
+      } catch (err) {
+        alert('Cannot reach backend. Make sure Flask is running on port 5000.\n\n' + err.message);
+        btn.disabled = false;
+        btn.textContent = 'Send OTP';
+      }
+    }
+
+    // ── OTP countdown ─────────────────────────────────────────────────
+    let adminOtpSecs = 240;
+    let adminOtpTimer = null;
+
+    function startAdminOtpTimer() {
+      adminOtpSecs = 240;
+      updateAdminHint();
+      if (adminOtpTimer) clearInterval(adminOtpTimer);
+      adminOtpTimer = setInterval(() => {
+        adminOtpSecs--;
+        updateAdminHint();
+        if (adminOtpSecs <= 0) {
+          clearInterval(adminOtpTimer);
+          document.getElementById('adminOtpHint').innerHTML = 'OTP <strong style="color:#b91c1c;">expired</strong>. Click Send OTP again.';
+          const btn = document.getElementById('adminSendOtpBtn');
+          btn.disabled = false;
+          btn.textContent = 'Resend OTP';
+        }
+      }, 1000);
+    }
+
+    function updateAdminHint() {
+      const m = Math.floor(adminOtpSecs / 60);
+      const s = adminOtpSecs % 60;
+      document.getElementById('adminOtpHint').innerHTML =
+        'OTP expires in <strong>' + m + ':' + String(s).padStart(2, '0') + '</strong>. Do not share with anyone.';
+    }
+
+    // ── Login: verify OTP with backend ────────────────────────────────
+    async function adminLogin(e) {
+      e.preventDefault();
+
+      const adminId = document.getElementById('adminId').value.trim();
+      const pass = document.getElementById('adminPass').value.trim();
+      const otp = document.getElementById('adminOtp').value.trim();
+
+      if (!adminId || !pass || !otp) {
+        alert('All fields are required.');
+        return;
+      }
+
+      if (!currentAdminId) {
+        alert('Please click "Send OTP" first to receive your verification code.');
+        return;
+      }
+
+      const loginBtn = document.getElementById('adminLoginBtn');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Verifying...';
+
+      try {
+        const res = await fetch(`${BACKEND}/admin-verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ admin_id: currentAdminId, otp: otp })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // OTP verified — show dashboard
+          document.getElementById('loginPage').style.display = 'none';
+          document.body.style.background = 'var(--bg)';
+          document.getElementById('loggedInAdmin').textContent = currentAdminId;
+          const dp = document.getElementById('dashboardPage');
+          dp.classList.add('visible');
+          loadReports();
+          startSessionTimer();
+          if (adminOtpTimer) clearInterval(adminOtpTimer);
+        } else {
+          alert('Invalid OTP: ' + (data.message || 'Please try again.'));
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Login to Dashboard';
+        }
+      } catch (err) {
+        alert('Cannot reach backend. Make sure Flask is running on port 5000.\n\n' + err.message);
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login to Dashboard';
+      }
+    }
+
+    // ── Table helpers ─────────────────────────────────────────────────
+    function riskBadge(r) {
+      if (r==='High') return '<span class="badge badge-high">High</span>';
+      if (r==='Medium') return '<span class="badge badge-medium">Medium</span>';
+      return '<span class="badge badge-low">Low</span>';
+    }
+
+    function statusBadge(s) {
+      if (s==='Escalated') return '<span class="badge badge-high">' + s + '</span>';
+      if (s==='Open') return '<span class="badge badge-info">' + s + '</span>';
+      if (s==='Under Review') return '<span class="badge badge-medium">' + s + '</span>';
+      return '<span class="badge badge-gray">' + s + '</span>';
+    }
+
+    let filteredIndex = [];   // maps rendered row index → complaints[] index
+
+    function renderTable(data) {
+      const tbody = document.getElementById('tableBody');
+      const noRes = document.getElementById('noResults');
+      // build index map
+      filteredIndex = data.map((r, _) => complaints.indexOf(r));
+      document.getElementById('rowCount').textContent = '(' + data.length + ' records)';
+      if (!data.length) {
+        tbody.innerHTML = '';
+        noRes.style.display = 'block';
+        return;
+      }
+      noRes.style.display = 'none';
+      tbody.innerHTML = data.map((r, i) => `
+        <tr>
+          <td style="font-family:'Courier New',monospace; font-size:12px; color:#1a56a0;">${r.ref}</td>
+          <td style="font-weight:500;">${r.name}</td>
+          <td style="font-size:12px; color:var(--text-muted);">${r.pid}</td>
+          <td>${r.type}</td>
+          <td>${riskBadge(r.risk)}</td>
+          <td>${statusBadge(r.status)}</td>
+          <td style="font-size:13px;">${r.date}</td>
+          <td><button class="btn btn-secondary btn-sm" onclick="viewCase(filteredIndex[${i}])">View</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function viewCase(idx) {
+      const r = complaints[idx] ? (complaints[idx]._raw || complaints[idx]) : null;
+      if (!r) { alert('Case data not found.'); return; }
+      alert(
+        'Ref No: ' + (r.ref || '—') + '\n' +
+        'Name: ' + (r.name || '—') + '\n' +
+        'Personnel ID: ' + (r.pid || '—') + '\n' +
+        'Type: ' + (r.type || '—') + '\n' +
+        'Platform: ' + (r.platform || '—') + '\n' +
+        'Risk: ' + (r.risk || '—') + '\n' +
+        'Status: ' + (r.status || '—') + '\n' +
+        'Date: ' + (r.date || '—') + '\n' +
+        'Fraud Score: ' + (r.fraudScore || r.aiPercentage || '—') + '\n' +
+        'Reported Text: ' + (r.reportedText || '—') + '\n' +
+        'Description: ' + (r.note || r.description || '—') + '\n' +
+        'Evidence: ' + (r.evidence || '—')
+      );
+    }
+
+    function applyFilters() {
+      const risk = document.getElementById('filterRisk').value;
+      const type = document.getElementById('filterType').value;
+      const status = document.getElementById('filterStatus').value;
+      const date = document.getElementById('filterDate').value.trim();
+      const search = document.getElementById('filterSearch').value.trim().toLowerCase();
+
+      filtered = complaints.filter(r => {
+        return (!risk || r.risk === risk)
+          && (!type || r.type === type)
+          && (!status || r.status === status)
+          && (!date || r.date.includes(date))
+          && (!search || r.name.toLowerCase().includes(search) || r.ref.toLowerCase().includes(search) || r.pid.toLowerCase().includes(search));
+      });
+      updateStats(filtered);
+      renderTable(filtered);
+    }
+
+    function resetFilters() {
+      ['filterRisk','filterType','filterStatus'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('filterDate').value = '';
+      document.getElementById('filterSearch').value = '';
+      filtered = [...complaints];
+      updateStats(filtered);
+      renderTable(filtered);
+    }
+
+    function logout() {
+      if (confirm('Log out of admin session?')) {
+        document.getElementById('loginPage').style.display = 'block';
+        document.body.style.background = '#0d1520';
+        document.getElementById('dashboardPage').classList.remove('visible');
+        document.getElementById('adminLoginForm').reset();
+        document.getElementById('adminOtpHint').textContent = '';
+        const btn = document.getElementById('adminSendOtpBtn');
+        btn.disabled = false;
+        btn.textContent = 'Send OTP';
+        const loginBtn = document.getElementById('adminLoginBtn');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login to Dashboard';
+        currentAdminId = '';
+        if (adminOtpTimer) clearInterval(adminOtpTimer);
+        if (sessionInterval) clearInterval(sessionInterval);
+      }
+    }
+
+    // ── Session countdown ─────────────────────────────────────────────
+    let sessionSecs = 1800;
+    let sessionInterval = null;
+
+    function startSessionTimer() {
+      sessionSecs = 1800;
+      sessionInterval = setInterval(() => {
+        sessionSecs--;
+        const m = Math.floor(sessionSecs / 60);
+        const s = sessionSecs % 60;
+        const el = document.getElementById('sessionTimer');
+        if (el) el.textContent = m + ':' + String(s).padStart(2, '0');
+        if (sessionSecs <= 0) {
+          clearInterval(sessionInterval);
+          alert('Session expired. Please login again.');
+          logout();
+        }
+      }, 1000);
+    }
+  </script>
+
+</body>
+</html>

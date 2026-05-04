@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Assessment Result — National Cyber Defence Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="top-strip">Government of India &nbsp;|&nbsp; Ministry of Defence &nbsp;|&nbsp; Cyber Security Division</div>
+
+  <header>
+    <div class="header-inner">
+      <svg class="emblem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" stroke="#c8922a" stroke-width="2" fill="none"/>
+        <circle cx="32" cy="32" r="22" stroke="#c8922a" stroke-width="1" fill="none"/>
+        <circle cx="32" cy="32" r="5" fill="#c8922a"/>
+        <line x1="32" y1="10" x2="32" y2="27" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="32" y1="37" x2="32" y2="54" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="10" y1="32" x2="27" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="37" y1="32" x2="54" y2="32" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="17.4" y1="17.4" x2="28.8" y2="28.8" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="35.2" y1="35.2" x2="46.6" y2="46.6" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="46.6" y1="17.4" x2="35.2" y2="28.8" stroke="#c8922a" stroke-width="1.2"/>
+        <line x1="28.8" y1="35.2" x2="17.4" y2="46.6" stroke="#c8922a" stroke-width="1.2"/>
+      </svg>
+      <div class="header-text">
+        <h1>National Cyber Defence Portal</h1>
+        <div class="subtitle">For Defence Personnel &amp; Their Families &nbsp;·&nbsp; Restricted Access</div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html">Home</a>
+      <a href="auth.html">Login / Register</a>
+      <a href="report.html">Report Incident</a>
+      <a href="result.html" class="active">Check Status</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </nav>
+
+  <div class="notice-bar">RESTRICTED — Incident assessment is classified. Do not share this result with unauthorised individuals.</div>
+
+  <div class="secure-strip">
+    <span>&#9679; SECURE</span>SSL/TLS Encrypted Connection &nbsp;|&nbsp; Case Reference: NCDP-2024-00847231
+  </div>
+
+  <main>
+    <div class="page-title">
+      <div class="breadcrumb"><a href="index.html">Home</a> &rsaquo; Threat Assessment Result</div>
+      <h2>Incident Assessment Report</h2>
+      <p>Automated analysis result for your submitted incident</p>
+    </div>
+
+    <div style="max-width: 720px; margin: 0 auto;">
+
+      <!-- Reference card -->
+      <div class="card-sm" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <div style="font-size:12px; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.06em;">Case Reference Number</div>
+          <div style="font-size:18px; font-weight:700; color: var(--navy-mid); font-family: 'Courier New', monospace; letter-spacing:0.08em;">NCDP-2024-00847231</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:12px; color: var(--text-muted);">Submitted on</div>
+          <div style="font-size:14px; font-weight:600; color: var(--text-primary);" id="submitDate"></div>
+        </div>
+      </div>
+
+      <!-- RISK LEVEL BLOCK — switch class between: high / medium / low -->
+      <div class="risk-level high" id="riskBlock">
+        <div class="risk-label">Risk Level Assessment</div>
+        <div class="risk-title" id="riskTitle">&#9888; HIGH RISK</div>
+        <div style="font-size:13px; margin-top:10px; opacity:0.85;" id="riskSub">Immediate action required</div>
+      </div>
+
+      <!-- Demo switcher (not production — for display) -->
+      <div style="display:flex; gap:10px; justify-content:center; margin-bottom:24px; flex-wrap:wrap;">
+        <button class="btn btn-sm" style="background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5;" onclick="setRisk('high', true)">Show: High Risk</button>
+        <button class="btn btn-sm" style="background:#fffbeb; color:#92400e; border:1px solid #fde68a;" onclick="setRisk('medium', true)">Show: Medium Risk</button>
+        <button class="btn btn-sm" style="background:#f0fdf4; color:#166534; border:1px solid #86efac;" onclick="setRisk('low', true)">Show: Low Risk</button>
+      </div>
+
+      <!-- ALERT MESSAGE -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <h2>Threat Analysis Summary</h2>
+          <p>Automated analysis by DCERT Threat Intelligence Engine v3.1</p>
+        </div>
+
+        <div class="alert alert-high" id="alertBox">
+          <div class="alert-title" id="alertTitle">Phishing Attempt Detected</div>
+          <div id="alertBody">This appears to be a phishing attempt targeting defence personnel. The submitted URL/content matches known malicious patterns in our threat database. Sender infrastructure has been flagged by multiple intelligence sources.</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom:20px;">
+          <div style="background: var(--bg); border-radius: var(--radius); padding: 14px 16px;">
+            <div style="font-size:12px; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Incident Type</div>
+            <div style="font-size:14px; font-weight:600; color: var(--text-primary);" id="incidentTypeCell">—</div>
+          </div>
+          <div style="background: var(--bg); border-radius: var(--radius); padding: 14px 16px;">
+            <div style="font-size:12px; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Confidence Score</div>
+            <div style="font-size:14px; font-weight:600; color: var(--text-primary);" id="confidenceScore">94%</div>
+          </div>
+          <div style="background: var(--bg); border-radius: var(--radius); padding: 14px 16px;">
+            <div style="font-size:12px; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Threat Category</div>
+            <div style="font-size:14px; font-weight:600; color: var(--text-primary);" id="threatCategory">Credential Harvesting</div>
+          </div>
+          <div style="background: var(--bg); border-radius: var(--radius); padding: 14px 16px;">
+            <div style="font-size:12px; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Case Status</div>
+            <div style="font-size:14px; font-weight:600; color: #1a56a0;">Under Review</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUGGESTED ACTIONS -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <h2>Recommended Actions</h2>
+          <p>Follow these steps immediately to protect yourself and your data</p>
+        </div>
+        <ul class="action-list" id="actionList">
+          <!-- populated by JS -->
+        </ul>
+      </div>
+
+      <!-- EMERGENCY CONTACTS -->
+      <div class="card-sm" style="border-top: 3px solid var(--red); margin-bottom:20px;" id="emergencyCard">
+        <h3 style="font-size:14px; font-weight:700; color: var(--red); margin-bottom:12px;">Emergency Cyber Response Contacts</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:13px; color: var(--text-secondary);">
+          <div>
+            <div style="font-weight:600; color: var(--text-primary);">DCERT 24x7 Hotline</div>
+            <div style="color: #1a56a0; font-weight:600;">1930</div>
+          </div>
+          <div>
+            <div style="font-weight:600; color: var(--text-primary);">MoD Cyber Cell</div>
+            <div style="color: #1a56a0; font-weight:600;">cybercell@mod.gov.in</div>
+          </div>
+          <div>
+            <div style="font-weight:600; color: var(--text-primary);">National Cyber Crime</div>
+            <div style="color: #1a56a0; font-weight:600;">cybercrime.gov.in / 1930</div>
+          </div>
+          <div>
+            <div style="font-weight:600; color: var(--text-primary);">Unit Security Officer</div>
+            <div>Contact your unit directly</div>
+          </div>
+        </div>
+      </div>
+      <!-- FULL INCIDENT DETAILS (FOR DOWNLOAD REPORT) -->
+<div class="card" id="fullReportSection" style="margin-bottom:20px;">
+  <div class="card-header">
+    <h2>Detailed Incident Report</h2>
+    <p>Complete case details submitted by user</p>
+  </div>
+
+  <div style="display:grid; gap:12px; font-size:14px;">
+
+    <p><strong>Full Name:</strong> <span id="r_name">—</span></p>
+
+    <p><strong>Personnel ID:</strong> <span id="r_pid">—</span></p>
+
+    <p><strong>Email:</strong> <span id="r_email">—</span></p>
+
+    <p><strong>Incident Type:</strong> <span id="r_type">—</span></p>
+
+    <p><strong>Description:</strong><br>
+      <span id="r_desc">—</span>
+    </p>
+
+    <p><strong>Evidence File:</strong> <span id="r_file">—</span></p>
+
+  </div>
+</div>
+
+      <!-- CTA -->
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="report.html" class="btn btn-primary">Report Another Incident</a>
+        <a href="index.html" class="btn btn-secondary">Return to Home</a>
+        <button onclick="window.print()" class="btn btn-secondary">&#128438; Print / Save Report</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <strong>National Cyber Defence Portal</strong> &nbsp;|&nbsp; Ministry of Defence, Government of India<br>
+    <span style="margin-top:4px; display:block;">For official use only. Unauthorized access is a criminal offence under the IT Act, 2000.</span>
+  </footer>
+
+  <script>
+    const riskData = {
+      high: {
+        label: '&#9888; HIGH RISK',
+        sub: 'Immediate action required',
+        alertClass: 'alert-high',
+        alertTitle: 'Phishing Attempt Detected',
+        alertBody: 'This appears to be a phishing attempt targeting defence personnel. The submitted URL/content matches known malicious patterns in our threat database. Sender infrastructure has been flagged by multiple intelligence sources.',
+        confidence: '94%',
+        category: 'Credential Harvesting',
+        actions: [
+          'Do not click on any links in the suspicious message or URL.',
+          'Do not enter any credentials, OTP, or personal information on the suspicious website.',
+          'Block the sender immediately on all platforms.',
+          'Report to your unit security officer without delay.',
+          'If you have already clicked the link, change all passwords immediately.',
+          'Run a full antivirus scan on the affected device.',
+          'Contact DCERT helpline: 1930 for immediate assistance.',
+          'Preserve all evidence (screenshots, original emails) and do not delete them.'
+        ]
+      },
+      medium: {
+        label: '&#9888; MEDIUM RISK',
+        sub: 'Exercise caution — action recommended',
+        alertClass: 'alert-medium',
+        alertTitle: 'Suspicious Content Identified',
+        alertBody: 'This content has characteristics consistent with social engineering or spam. While not definitively malicious, it exhibits suspicious patterns. Exercise caution and follow the recommended steps below.',
+        confidence: '71%',
+        category: 'Social Engineering / Spam',
+        actions: [
+          'Do not respond to the sender or engage with the content.',
+          'Block the sender as a precaution.',
+          'Do not share any personal or financial information.',
+          'Monitor your accounts for any unusual activity over the next 30 days.',
+          'Inform your unit security officer of the incident.',
+          'Report to national cybercrime portal (cybercrime.gov.in) if financial fraud is involved.'
+        ]
+      },
+      low: {
+        label: '&#10003; LOW RISK',
+        sub: 'No immediate threat detected',
+        alertClass: 'alert-low',
+        alertTitle: 'Low Threat — Likely Spam or False Positive',
+        alertBody: 'Analysis indicates this content is likely spam or a low-severity nuisance with no significant malicious indicators. Continue to exercise standard cyber hygiene practices.',
+        confidence: '88%',
+        category: 'Spam / Nuisance',
+        actions: [
+          'Mark the message as spam and block the sender.',
+          'No immediate escalation required, but remain vigilant.',
+          'Continue practising standard cyber hygiene.',
+          'Do not subscribe to unknown mailing lists or promotional content.',
+          'Keep your devices and software updated with latest security patches.'
+        ]
+      }
+    };
+
+    function setRisk(level, isDemo) {
+      var d = riskData[level];
+      var block = document.getElementById('riskBlock');
+      block.className = 'risk-level ' + level;
+      document.getElementById('riskTitle').innerHTML = d.label;
+      document.getElementById('riskSub').textContent = d.sub;
+
+      var ab = document.getElementById('alertBox');
+      ab.className = 'alert ' + d.alertClass;
+      document.getElementById('alertTitle').textContent = d.alertTitle;
+      document.getElementById('alertBody').textContent = d.alertBody;
+
+      if (isDemo) {
+        document.getElementById('confidenceScore').textContent = d.confidence;
+        document.getElementById('threatCategory').textContent = d.category;
+      }
+
+      var ul = document.getElementById('actionList');
+      ul.innerHTML = d.actions.map(function(a) {
+        return '<li><span class="action-dot"></span>' + a + '</li>';
+      }).join('');
+
+      var ec = document.getElementById('emergencyCard');
+      ec.style.borderColor = level === 'high' ? 'var(--red)' : level === 'medium' ? '#d97706' : '#16a34a';
+      var et = ec.querySelector('h3');
+      et.style.color = level === 'high' ? 'var(--red)' : level === 'medium' ? '#d97706' : '#16a34a';
+    }
+
+    var typeLabels = {
+      url:       'Suspicious URL / Link',
+      message:   'Suspicious Message / Text',
+      file:      'Suspicious File / Attachment',
+      call:      'Vishing / Fraudulent Call',
+      account:   'Account Compromise',
+      financial: 'Financial Fraud / UPI Scam',
+      other:     'Other'
+    };
+
+    var categoryLabels = {
+      fraud:              'Financial Fraud',
+      phishing:           'Phishing / Credential Harvesting',
+      social_engineering: 'Social Engineering',
+      safe:               'No Threat Detected'
+    };
+
+    var now = new Date();
+    document.getElementById('submitDate').textContent = now.toLocaleString('en-IN', { dateStyle:'long', timeStyle:'short' });
+
+    var urlParams  = new URLSearchParams(window.location.search);
+    var riskParam  = (urlParams.get('risk')      || 'HIGH').toUpperCase();
+    var prediction = urlParams.get('prediction') || 'phishing';
+    var confidence = urlParams.get('confidence') || '0.94';
+    var incType    = urlParams.get('type')       || 'message';
+
+    var riskKey = riskParam === 'HIGH' ? 'high' : riskParam === 'MEDIUM' ? 'medium' : 'low';
+
+    document.getElementById('confidenceScore').textContent = Math.round(parseFloat(confidence) * 100) + '%';
+    document.getElementById('threatCategory').textContent  = categoryLabels[prediction] || prediction;
+    document.getElementById('incidentTypeCell').textContent = typeLabels[incType] || incType;
+
+    setRisk(riskKey);
+    /* LOAD FULL REPORT DATA FROM LOCAL STORAGE */
+window.addEventListener('load', () => {
+
+  document.getElementById('r_name').textContent =
+    localStorage.getItem('reporterName') || 'N/A';
+
+  document.getElementById('r_pid').textContent =
+    localStorage.getItem('personnelId') || 'N/A';
+
+  document.getElementById('r_email').textContent =
+    localStorage.getItem('reporterEmail') || 'N/A';
+
+  document.getElementById('r_type').textContent =
+    localStorage.getItem('incidentType') || 'N/A';
+
+  document.getElementById('r_desc').textContent =
+    localStorage.getItem('incidentDescription') || 'N/A';
+
+  document.getElementById('r_file').textContent =
+    localStorage.getItem('evidenceFile') || 'No file uploaded';
+
+});
+  </script>
+
+</body>
+</html>
