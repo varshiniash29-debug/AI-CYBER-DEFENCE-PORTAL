@@ -21,8 +21,8 @@ vectorizer = joblib.load("models/vectorizer.pkl")
 # =========================
 # EMAIL CONFIG  (single definition)
 # =========================
-EMAIL_ADDRESS = "varshiniash29@gmail.com"
-EMAIL_PASSWORD = "tndjqpuljpnfnqiv"   # App Password
+EMAIL_ADDRESS = "EMAIL_ADDRESS"
+EMAIL_PASSWORD = "APP_PASSWORD"   # App Password
 
 # =========================
 # OTP STORES
